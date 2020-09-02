@@ -41,7 +41,7 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     )
 
     # Set title
-    fig.suptitle('New cases in the Netherlands per day', fontsize=24)
+    # fig.suptitle('New cases in the Netherlands per day', fontsize=24)
     ax.set_title(f'Last updated on {current_date}', fontsize=18)
     plt.xticks(ha="center")
 
@@ -116,7 +116,7 @@ def plot_rt(df: pd.DataFrame, smooth=True) -> None:
     )
 
     # Set title
-    fig.suptitle('Modeling effective reproduction number $R_t$for the Netherlands is real-time', fontsize=24)
+    # fig.suptitle('Modeling effective reproduction number $R_t$for the Netherlands is real-time', fontsize=24)
     ax.set_title(f'Last updated on {current_date} with $R_t = {df.most_likely[-1]}$ and 95% confidence in range ${df.low_95[-1]} - {df.high_95[-1]}$', fontsize=18)
 
     # Set label and ticks
