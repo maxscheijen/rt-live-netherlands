@@ -4,11 +4,15 @@ import seaborn as sns
 import pandas as pd
 import datetime
 
+from matplotlib import rcParams
+
 # Use Systrom's matplotlib style
 try:
     plt.style.use('https://raw.githubusercontent.com/k-sys/covid-19/master/matplotlibrc')
 except:
     pass
+
+rcParams['font.family'] = 'Helvetica'
 
 
 def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
