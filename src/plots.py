@@ -5,6 +5,7 @@ import pandas as pd
 import datetime
 
 from matplotlib import rcParams
+from src.annotations import annots
 
 # Use Systrom's matplotlib style
 try:
@@ -122,6 +123,21 @@ def plot_rt(df: pd.DataFrame, smooth=True) -> None:
     # Set title
     # fig.suptitle('Modeling effective reproduction number $R_t$for the Netherlands is real-time', fontsize=24)
     ax.set_title(f'Last updated on {current_date} with $R_t = {df.most_likely[-1]}$ and 95% confidence in range ${df.low_95[-1]} - {df.high_95[-1]}$', fontsize=18)
+
+    # Plot annotations
+    for date in annots.keys():
+        ax.annotate(annots[date]["text"],
+                    xy=(annots[date]['date'],
+                        df.loc[date].most_likely),
+                    xytext=(annots[date]["xytext"][0],
+                            df.loc[date].most_likely+annots[date]['xytext'][1]),
+                    arrowprops=dict(
+                        facecolor='#333',
+                        edgecolor='#333',
+                        shrink=0.05,
+                        width=0.5,
+                        headwidth=6)
+                    )
 
     # Set label and ticks
     ax.set_ylabel('$R_{t}$', fontsize=16)
