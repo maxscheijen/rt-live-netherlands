@@ -10,5 +10,6 @@ annots = {
     "2020-06-15": {"date": "2020-06-15", "text": "Colleges open", "xytext": ["2020-06-10", default_y]},
     "2020-09-28": {"date": "2020-09-28", "text": "Earlier closing bars \nSports without audiance \nmax 3 persons at home", "xytext": ["2020-09-10", default_y - 1.25]},
     "2020-10-14": {"date": "2020-10-14", "text": "Partial lockdown", "xytext": ["2020-10-04", default_y]},
-    "2020-11-03": {"date": "2020-11-03", "text": "Additional closures \nmuseums, theaters, cinemas, \namusement parks, zoos, \nswimming pools and libraries.", "xytext": ["2020-10-16", default_y - 1.1]}
+    "2020-11-03": {"date": "2020-11-03", "text": "Additional closures \nmuseums, theaters, cinemas, \namusement parks, zoos, \nswimming pools and libraries.", "xytext": ["2020-10-16", default_y - 1.1]},
+    "2020-12-15": {"date": "2020-12-15", "text": "Hard lockdown", "xytext": ["2020-12-01", default_y]},
 }
