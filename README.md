@@ -1,3 +1,6 @@
+![build](https://github.com/maxscheijen/rt-live-netherlands/workflows/Download%20data%20and%20run%20model/badge.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
 # Real-time Effective Reproduction Number
 
 > Graphs are updates daily

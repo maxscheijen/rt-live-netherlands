@@ -55,7 +55,7 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     ax.set_xlabel('')
 
     ax.xaxis.set_major_locator(mdates.MonthLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%B'))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
     ax.xaxis.set_minor_locator(mdates.MonthLocator())
     ax.tick_params(axis='both', which='major', labelsize=14, rotation='default')
 
@@ -121,7 +121,6 @@ def plot_rt(df: pd.DataFrame, smooth=True) -> None:
     )
 
     # Set title
-    # fig.suptitle('Modeling effective reproduction number $R_t$for the Netherlands is real-time', fontsize=24)
     ax.set_title(f'Last updated on {current_date} with $R_t = {df.most_likely[-1]}$ and 95% confidence in range ${df.low_95[-1]} - {df.high_95[-1]}$', fontsize=18)
 
     # Plot annotations
@@ -144,7 +143,7 @@ def plot_rt(df: pd.DataFrame, smooth=True) -> None:
     ax.set_xlabel('')
 
     ax.xaxis.set_major_locator(mdates.MonthLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%B'))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%b'))
 
     ax.set_yticks(range(4))
     ax.set_ylim(-0.1, 3)
