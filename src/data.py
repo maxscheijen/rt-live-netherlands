@@ -2,9 +2,9 @@ import pandas as pd
 import numpy as np
 import warnings
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
-url = "https://raw.githubusercontent.com/J535D165/CoronaWatchNL/master/data/rivm_NL_covid19_national.csv"
+url = "https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv"
 
 
 def get_data(url: str = url) -> pd.DataFrame:
@@ -13,7 +13,9 @@ def get_data(url: str = url) -> pd.DataFrame:
 
     url: url to csv
     """
-    return pd.read_csv(url, parse_dates=['Datum'])
+    return pd.read_csv(url, sep=";", parse_dates=["Date_of_publication"])[
+        ["Date_of_publication", "Total_reported"]
+    ]
 
 
 def new_cases(df: pd.DataFrame) -> pd.DataFrame:
@@ -23,18 +25,15 @@ def new_cases(df: pd.DataFrame) -> pd.DataFrame:
     df: pandas DataFrame
     """
 
-    # Only get total cases
-    df = df[df['Type'] == 'Totaal']
-    df = df.drop(columns='Type')
+    # Only get total cases based on date of publication
+    df = df.groupby(df["Date_of_publication"].dt.date).sum().reset_index()
 
     # Rename columns
-    df.columns = ['date', 'cases']
+    df.columns = ["date", "cases"]
 
     # Set date as index
-    df = df.set_index('date')
+    df = df.set_index("date")
 
-    # Calculate new cases
-    df = df.diff().fillna(0).astype(int)
     return df
 
 
@@ -48,10 +47,11 @@ def smooth_cases(df: pd.DataFrame, window: int = 7, cutoff: int = 25) -> pd.Data
     """
 
     # Calculate smoohted new cases
-    smoothed = (df
-                .rolling(7, win_type='gaussian', min_periods=1, center=True)
-                .mean(std=2)
-                .round())
+    smoothed = (
+        df.rolling(7, win_type="gaussian", min_periods=1, center=True)
+        .mean(std=2)
+        .round()
+    )
 
     # Get start index when new cases > cutoff
     idx_start = np.searchsorted(smoothed.values.flatten(), cutoff)

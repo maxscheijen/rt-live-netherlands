@@ -14,7 +14,7 @@ def test_new_cases():
 
     assert isinstance(cases, pd.DataFrame)
     assert len(cases.columns) == 1
-    assert cases.dtypes['cases'] == int
+    assert cases.dtypes["cases"] == int
     assert cases.index.nunique() == len(cases)
 
 

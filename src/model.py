@@ -28,9 +28,7 @@ def get_posteriors(df: pd.DataFrame, sigma: float = 0.25) -> pd.DataFrame:
 
     # 2. Calculate each day's likelihood
     likelihoods = pd.DataFrame(
-        data=stats.poisson.pmf(df[1:].values, lam),
-        columns=rt_range,
-        index=df.index[1:]
+        data=stats.poisson.pmf(df[1:].values, lam), columns=rt_range, index=df.index[1:]
     ).transpose()
 
     # 3. Create the Gaussian Matrix
@@ -47,9 +45,7 @@ def get_posteriors(df: pd.DataFrame, sigma: float = 0.25) -> pd.DataFrame:
     # Create a DataFrame that will hold our posteriors for each day
     # Insert our prior as the first posterior.
     posteriors = pd.DataFrame(
-        index=rt_range,
-        columns=df.index,
-        data={df.index[0]: prior0}
+        index=rt_range, columns=df.index, data={df.index[0]: prior0}
     )
 
     # Keep track of the sum of the log of the probability of the data for maximum likelihood calculation.
@@ -85,9 +81,11 @@ def highest_density_interval(posteriors: pd.DataFrame, p=0.9) -> pd.DataFrame:
     """
 
     # If we pass a DataFrame, just call this recursively on the columns
-    if(isinstance(posteriors, pd.DataFrame)):
-        return pd.DataFrame([highest_density_interval(posteriors[col], p=p) for col in posteriors],
-                            index=posteriors.columns)
+    if isinstance(posteriors, pd.DataFrame):
+        return pd.DataFrame(
+            [highest_density_interval(posteriors[col], p=p) for col in posteriors],
+            index=posteriors.columns,
+        )
 
     cumsum = np.cumsum(posteriors.values)
 
@@ -104,10 +102,15 @@ def highest_density_interval(posteriors: pd.DataFrame, p=0.9) -> pd.DataFrame:
     most_likely = posteriors.idxmax(axis=0)
     high = posteriors.index[highs[best]]
 
-    return pd.Series([most_likely, low, high], index=['most_likely', f'low_{p*100:.0f}', f'high_{p*100:.0f}']).round(2)
+    return pd.Series(
+        [most_likely, low, high],
+        index=["most_likely", f"low_{p*100:.0f}", f"high_{p*100:.0f}"],
+    ).round(2)
 
 
-def bayesian_model(df: pd.DataFrame, p=0.90, save_posteriors_df=False, optimize=True) -> pd.DataFrame:
+def bayesian_model(
+    df: pd.DataFrame, p=0.90, save_posteriors_df=False, optimize=True
+) -> pd.DataFrame:
     """
     Bayesian model that optimzes for the best sigma
 
@@ -119,27 +122,27 @@ def bayesian_model(df: pd.DataFrame, p=0.90, save_posteriors_df=False, optimize=
 
     # Initialize dict to hold posteriors and log likelihoods
     result = {}
-    result['posteriors'] = []
-    result['log_likelihoods'] = []
+    result["posteriors"] = []
+    result["log_likelihoods"] = []
 
     # Loop over all sigmas and store posteriors and log likelihoods
     if optimize:
         for sigma in tqdm(sigmas):
             posteriors, log_likelihood = get_posteriors(df=df, sigma=sigma)
-            result['posteriors'].append(posteriors)
-            result['log_likelihoods'].append(log_likelihood)
+            result["posteriors"].append(posteriors)
+            result["log_likelihoods"].append(log_likelihood)
 
         # Total log likelohhods for each sigma
         total_log_likelihoods = np.zeros_like(sigmas)
 
         # Add log to total
-        total_log_likelihoods += result['log_likelihoods']
+        total_log_likelihoods += result["log_likelihoods"]
 
         # Get index with max log likelihood total
         max_likelihood_index = total_log_likelihoods.argmax()
 
         # Get corresponding posteriors
-        posteriors = result['posteriors'][max_likelihood_index]
+        posteriors = result["posteriors"][max_likelihood_index]
 
     else:
         posteriors, log_likelihood = get_posteriors(df=df)
@@ -149,10 +152,12 @@ def bayesian_model(df: pd.DataFrame, p=0.90, save_posteriors_df=False, optimize=
     for p in [0.65, 0.95]:
         likely_hdi.append(highest_density_interval(posteriors, p=p))
 
-    likely_hdi = pd.merge(left=likely_hdi[0], right=likely_hdi[1], on=['date', 'most_likely'])
+    likely_hdi = pd.merge(
+        left=likely_hdi[0], right=likely_hdi[1], on=["date", "most_likely"]
+    )
 
     # Save DataFrame with most likely Rt and HDI to CSV
     if save_posteriors_df:
-        likely_hdi.to_csv('data/most_likely_rt.csv', index=True)
+        likely_hdi.to_csv("data/most_likely_rt.csv", index=True)
 
     return likely_hdi
