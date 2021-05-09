@@ -21,8 +21,9 @@ def run():
     plots.original_smoothed(original, smoothed)
 
     # Get posteriors from optimized Bayesian model
-    posterior = model.bayesian_model(smoothed, p=0.95, save_posteriors_df=True,
-                                     optimize=False)
+    posterior = model.bayesian_model(
+        smoothed, p=0.95, save_posteriors_df=True, optimize=False
+    )
 
     # Plot Rt estimate
     plots.plot_rt(posterior)
