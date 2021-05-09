@@ -5,15 +5,13 @@
 
 > Graphs are updates daily
 
-This repository contains the code for downloading, processing, and model COVID-19 data for the Netherlands. This simple Bayesian model estimates the real-time effective reproduction number $R_t$ based on new case counts. All credit for developing this model goes to Systrom <sup>1</sup>. He did all the hard work. I simply applied his insights, research, and model to estimate $R_t$ in real-time in the Netherlands. The national COVID-19 data is gathered by CoronaWatchNL<sup>2</sup> based on the raw data provided by the RIVM.
+This repository contains the code for downloading, processing, and model COVID-19 data for the Netherlands. This simple Bayesian model estimates the real-time effective reproduction number Rt based on new case counts. All credit for developing this model goes to Systrom <sup>1</sup>. He did all the hard work. I simply applied his insights, research, and model to estimate Rt in real-time in the Netherlands. The national COVID-19 data is gathered by CoronaWatchNL<sup>2</sup> based on the raw data provided by the RIVM.
 
-Checkout $R_t$ for the Netherlands in real-time [here](https://maxscheijen.github.io/rt-live-netherlands/).
+## Estimating Rt in real-time
 
-## Estimating $R_t$ in real-time
+The plot below displays an estimate of the effective reproduction number Rt in real-time in the Netherlands. The reproduction number estimates the number of people infected by one contagious person.
 
-The plot below displays an estimate of the effective reproduction number $R_t$ in real-time in the Netherlands. The reproduction number estimates the number of people infected by one contagious person.
-
-Systrom$^1$ applied a gaussian filter to the new case time series because of the stochastic nature of reporting due to for example backlogs or corrections. The filter is an arbitrary choice, but the real-world process is not nearly as stochastic as the actual reporting, smoothing helps with this.
+Systrom<sup>1</sup> applied a gaussian filter to the new case time series because of the stochastic nature of reporting due to for example backlogs or corrections. The filter is an arbitrary choice, but the real-world process is not nearly as stochastic as the actual reporting, smoothing helps with this.
 
 ![original_smoothed](figures/most_likely_rt.svg)
 
