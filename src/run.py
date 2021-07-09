@@ -1,3 +1,5 @@
+import pandas as pd
+
 from src import data
 from src import plots
 from src import model
@@ -25,8 +27,11 @@ def run():
         smoothed, p=0.95, save_posteriors_df=True, optimize=False
     )
 
+    posterior = pd.read_csv("data/most_likely_rt.csv",
+                            parse_dates=["date"], index_col=["date"])
+
     # Plot Rt estimate
-    plots.plot_rt(posterior)
+    plots.plot_rt(posterior, annotate=True)
 
 
 if __name__ == "__main__":

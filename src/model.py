@@ -32,7 +32,8 @@ def get_posteriors(df: pd.DataFrame, sigma: float = 0.25) -> pd.DataFrame:
     ).transpose()
 
     # 3. Create the Gaussian Matrix
-    process_matrix = stats.norm(loc=rt_range, scale=sigma).pdf(rt_range[:, None])
+    process_matrix = stats.norm(
+        loc=rt_range, scale=sigma).pdf(rt_range[:, None])
 
     # 3a. Normalize all rows to sum to 1
     process_matrix /= process_matrix.sum(axis=0)
@@ -83,7 +84,8 @@ def highest_density_interval(posteriors: pd.DataFrame, p=0.9) -> pd.DataFrame:
     # If we pass a DataFrame, just call this recursively on the columns
     if isinstance(posteriors, pd.DataFrame):
         return pd.DataFrame(
-            [highest_density_interval(posteriors[col], p=p) for col in posteriors],
+            [highest_density_interval(posteriors[col], p=p)
+             for col in posteriors],
             index=posteriors.columns,
         )
 

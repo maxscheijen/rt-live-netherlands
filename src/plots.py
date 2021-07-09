@@ -12,8 +12,8 @@ try:
     plt.style.use(
         "https://raw.githubusercontent.com/k-sys/covid-19/master/matplotlibrc"
     )
-except:
-    pass
+except Exception as e:
+    print(e.message)
 
 rcParams["font.family"] = "Helvetica"
 
@@ -49,7 +49,8 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     ax.xaxis.set_major_locator(mdates.MonthLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
     ax.xaxis.set_minor_locator(mdates.MonthLocator())
-    ax.tick_params(axis="both", which="major", labelsize=14, rotation="default")
+    ax.tick_params(axis="both", which="major",
+                   labelsize=14, rotation="default")
 
     # Remove frame legend
     ax.legend(frameon=False)
@@ -70,7 +71,7 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
     # Logic to apply smoothing
     if smooth:
         df = (
-            df.rolling(7, win_type="gaussian", min_periods=1, center=True)
+            df.rolling(14, win_type="gaussian", min_periods=1, center=True)
             .mean(std=2)
             .round(2)
         )
@@ -89,7 +90,7 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
         c="k",
         label="Most Likely $R_t$",
         linewidth=1,
-        marker="o",
+        # marker="o",
         markevery=2,
         markersize=5,
         markerfacecolor="white",
@@ -107,7 +108,7 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
 
     # Set title
     ax.set_title(
-        f"Last updated on {current_date} with $R_t = {df.most_likely[-1]}$ and 95% confidence in range ${df.low_95[-1]} - {df.high_95[-1]}$",
+        f"Last updated on {current_date} with $R_t = {df.most_likely.iloc[-1]}$ and 95% confidence in range ${df.low_95.iloc[-1]} - {df.high_95.iloc[-1]}$",
         fontsize=18,
     )
 
@@ -124,7 +125,7 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
                 arrowprops=dict(
                     facecolor="#333",
                     edgecolor="#333",
-                    shrink=0.05,
+                    shrink=0.1,
                     width=0.5,
                     headwidth=6,
                 ),
@@ -138,9 +139,10 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
 
     ax.set_yticks(range(4))
-    ax.set_ylim(-0.1, 3)
+    ax.set_ylim(-0.1, 4)
     ax.set_xlim(df.index[0], df.index[-1])
-    ax.tick_params(axis="both", which="major", labelsize=14, rotation="default")
+    ax.tick_params(axis="both", which="major",
+                   labelsize=14, rotation="default")
     plt.xticks(ha="center")
 
     # Remove frame legend
