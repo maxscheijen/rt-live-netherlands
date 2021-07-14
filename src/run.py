@@ -1,8 +1,6 @@
 import pandas as pd
 
-from src import data
-from src import plots
-from src import model
+from src import data, model, plots
 
 
 def run():
@@ -24,11 +22,12 @@ def run():
 
     # Get posteriors from optimized Bayesian model
     posterior = model.bayesian_model(
-        smoothed, p=0.95, save_posteriors_df=True, optimize=False
+        smoothed, p=0.95, save_posteriors_df=True, optimize=True
     )
 
-    posterior = pd.read_csv("data/most_likely_rt.csv",
-                            parse_dates=["date"], index_col=["date"])
+    posterior = pd.read_csv(
+        "data/most_likely_rt.csv", parse_dates=["date"], index_col=["date"]
+    )
 
     # Plot Rt estimate
     plots.plot_rt(posterior, annotate=True)

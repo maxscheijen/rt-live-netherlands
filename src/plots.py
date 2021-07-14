@@ -1,10 +1,11 @@
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-import seaborn as sns
-import pandas as pd
 import datetime
 
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 from matplotlib import rcParams
+
 from src.annotations import annots
 
 # Use Systrom's matplotlib style
@@ -16,15 +17,15 @@ except Exception as e:
     print(e.message)
 
 rcParams["font.family"] = "Helvetica"
+current_date = datetime.date.today().strftime("%d %B %Y")
 
 
-def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
+def original_smoothed(
+    original: pd.DataFrame, smoothed: pd.DataFrame, current_date: str = current_date
+) -> None:
     """
     Plot original and smoothed new cases
     """
-
-    # Get current date
-    current_date = datetime.date.today().strftime("%d %B %Y")
 
     # Create figure with axes
     fig, ax = plt.subplots(figsize=(16, 8))
@@ -38,8 +39,9 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     smoothed.cases.plot(c="k", label="Smoothed", legend=True, ax=ax)
 
     # Set title
-    # fig.suptitle('New cases in the Netherlands per day', fontsize=24)
-    ax.set_title(f"Last updated on {current_date}", fontsize=18)
+    ax.set_title(
+        f"Positive COVID-19 tests - last updated on {current_date}", fontsize=18
+    )
     plt.xticks(ha="center")
 
     # Set label and ticks
@@ -49,8 +51,7 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     ax.xaxis.set_major_locator(mdates.MonthLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%b"))
     ax.xaxis.set_minor_locator(mdates.MonthLocator())
-    ax.tick_params(axis="both", which="major",
-                   labelsize=14, rotation="default")
+    ax.tick_params(axis="both", which="major", labelsize=14, rotation="default")
 
     # Remove frame legend
     ax.legend(frameon=False)
@@ -63,7 +64,12 @@ def original_smoothed(original: pd.DataFrame, smoothed: pd.DataFrame) -> None:
     fig.savefig("figures/original_smoothed.svg")
 
 
-def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> None:
+def plot_rt(
+    df: pd.DataFrame,
+    smooth: bool = True,
+    annotate: bool = False,
+    current_date: str = current_date,
+) -> None:
     """
     Plot most likely Rt and HDI
     """
@@ -75,9 +81,6 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
             .mean(std=2)
             .round(2)
         )
-
-    # Get last date
-    current_date = datetime.date.today().strftime("%d %B %Y")
 
     # Create figure with axes
     fig, ax = plt.subplots(figsize=(16, 8))
@@ -141,8 +144,7 @@ def plot_rt(df: pd.DataFrame, smooth: bool = True, annotate: bool = False) -> No
     ax.set_yticks(range(4))
     ax.set_ylim(-0.1, 4)
     ax.set_xlim(df.index[0], df.index[-1])
-    ax.tick_params(axis="both", which="major",
-                   labelsize=14, rotation="default")
+    ax.tick_params(axis="both", which="major", labelsize=14, rotation="default")
     plt.xticks(ha="center")
 
     # Remove frame legend
