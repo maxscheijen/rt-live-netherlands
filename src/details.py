@@ -78,7 +78,9 @@ smooth_nl = (
 nl_rt, _ = model.get_posteriors(smooth_nl)
 nl_hdi = highest_density_interval(nl_rt, p=0.90).reset_index()
 
-nl = pd.merge(nl_df.reset_index(), nl_hdi)
+nl = cases_df.groupby(["date"]).mean().reset_index()
+nl["provincie"] = "Nederland"
+
 covid = pd.concat([cases_df, nl])
 covid.date = pd.to_datetime(covid.date).dt.date
 covid = covid.sort_values(["provincie", "date"]).reset_index(drop=True)
