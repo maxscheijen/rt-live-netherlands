@@ -6,3 +6,4 @@ seaborn
 pytest
 flake8
 tqdm
+pyjanitor

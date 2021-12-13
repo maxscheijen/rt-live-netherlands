@@ -23,6 +23,7 @@ jobs:
       - name: Run model
         run: |
           python3 -m src.run
+          python3 -m src.details
       - uses: mikeal/publish-to-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

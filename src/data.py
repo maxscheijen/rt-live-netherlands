@@ -19,6 +19,36 @@ def get_data(url: str = url) -> pd.DataFrame:
     ]
 
 
+def get_data_better(url: str = url):
+    data = (
+        pd.read_csv(
+            url,
+            sep=";",
+            parse_dates=["Date_of_publication"],
+        )
+        .clean_names()
+        .drop(
+            columns=[
+                "date_of_report",
+                "municipality_code",
+                "municipality_name",
+                "security_region_code",
+                "security_region_name",
+                "municipal_health_service",
+                "roaz_region",
+            ]
+        )
+        .rename(
+            columns={
+                "date_of_publication": "date",
+                "province": "provincie",
+                "total_reported": "cases",
+            }
+        )
+    )
+    return data
+
+
 def new_cases(df: pd.DataFrame) -> pd.DataFrame:
     """
     Processes data to get new case counts
