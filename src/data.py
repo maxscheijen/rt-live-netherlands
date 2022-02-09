@@ -21,11 +21,7 @@ def get_data(url: str = url) -> pd.DataFrame:
 
 def get_data_better(url: str = url):
     data = (
-        pd.read_csv(
-            url,
-            sep=";",
-            parse_dates=["Date_of_publication"],
-        )
+        pd.read_csv(url, sep=";", parse_dates=["Date_of_publication"])
         .clean_names()
         .drop(
             columns=[
@@ -36,6 +32,7 @@ def get_data_better(url: str = url):
                 "security_region_name",
                 "municipal_health_service",
                 "roaz_region",
+                "version",
             ]
         )
         .rename(

@@ -43,13 +43,17 @@ for i, provincie in tqdm(enumerate(provincies)):
     posteriors, log_likelihood = model.get_posteriors(smoothed)
 
     # Get HDI based on posteriors
-    hdi = highest_density_interval(posteriors, p=0.90)
+    try:
+        hdi = highest_density_interval(posteriors, p=0.90)
 
-    # Set provincie name in column
-    hdi["provincie"] = provincie
+        # Set provincie name in column
+        hdi["provincie"] = provincie
 
-    # Append dataframe list
-    results.append(hdi)
+        # Append dataframe list
+        results.append(hdi)
+    except:
+        print(f"Error in: {provincie} only using most likely")
+        results.append(pd.DataFrame(posteriors.idxmax(), columns=["most_likely"]))
 
 
 final = pd.concat(results).reset_index()
